@@ -1,0 +1,1140 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "API de Futbol Reservas",
+    "description": "Documentación de la API para la gestión de reservas de canchas de fútbol.",
+    "version": "1.0.0"
+  },
+  "host": "localhost:3000",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "Canchas",
+      "description": "Operaciones relacionadas con las canchas."
+    },
+    {
+      "name": "Clientes",
+      "description": "Operaciones relacionadas con los clientes."
+    },
+    {
+      "name": "Encargados",
+      "description": "Operaciones relacionadas con los encargados."
+    },
+    {
+      "name": "Horarios",
+      "description": "Operaciones relacionadas con los horarios."
+    },
+    {
+      "name": "Pagos",
+      "description": "Operaciones relacionadas con los pagos."
+    },
+    {
+      "name": "Reservas",
+      "description": "Operaciones relacionadas con las reservas."
+    },
+    {
+      "name": "Usuarios",
+      "description": "Operaciones relacionadas con los usuarios."
+    }
+  ],
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/canchas/": {
+      "post": {
+        "tags": [
+          "Canchas"
+        ],
+        "summary": "Crear una nueva cancha",
+        "description": "Crea una cancha nueva en la base de datos.",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Datos de la cancha a crear",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Cancha"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Cancha creada exitosamente",
+            "schema": {
+              "$ref": "#/definitions/Cancha"
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Canchas"
+        ],
+        "summary": "Obtener todas las canchas",
+        "description": "Retorna una lista de todas las canchas registradas.",
+        "responses": {
+          "200": {
+            "description": "Lista de canchas obtenida con éxito.",
+            "schema": {
+              "$ref": "#/definitions/Cancha"
+            }
+          }
+        }
+      }
+    },
+    "/canchas/{id}": {
+      "get": {
+        "tags": [
+          "Canchas"
+        ],
+        "summary": "Obtener una cancha por ID",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID de la cancha"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cancha encontrada",
+            "schema": {
+              "$ref": "#/definitions/Cancha"
+            }
+          },
+          "404": {
+            "description": "Cancha no encontrada"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Canchas"
+        ],
+        "summary": "Actualizar una cancha",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID de la cancha"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Datos de la cancha a actualizar",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Cancha"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cancha actualizada exitosamente",
+            "schema": {
+              "$ref": "#/definitions/Cancha"
+            }
+          },
+          "404": {
+            "description": "Cancha no encontrada"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Canchas"
+        ],
+        "summary": "Eliminar una cancha",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID de la cancha"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cancha eliminada exitosamente"
+          },
+          "404": {
+            "description": "Cancha no encontrada"
+          }
+        }
+      }
+    },
+    "/clientes/": {
+      "post": {
+        "tags": [
+          "Clientes"
+        ],
+        "summary": "Crear un nuevo cliente",
+        "description": "Crea un cliente nuevo en la base de datos.",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Datos del cliente a crear",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Cliente"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Cliente creado exitosamente",
+            "schema": {
+              "$ref": "#/definitions/Cliente"
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Clientes"
+        ],
+        "summary": "Obtener todos los clientes",
+        "description": "Retorna una lista de todos los clientes registrados.",
+        "responses": {
+          "200": {
+            "description": "Lista de clientes obtenida con éxito.",
+            "schema": {
+              "$ref": "#/definitions/Cliente"
+            }
+          }
+        }
+      }
+    },
+    "/clientes/{id}": {
+      "get": {
+        "tags": [
+          "Clientes"
+        ],
+        "summary": "Obtener un cliente por ID",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID del cliente"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cliente encontrado",
+            "schema": {
+              "$ref": "#/definitions/Cliente"
+            }
+          },
+          "404": {
+            "description": "Cliente no encontrado"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Clientes"
+        ],
+        "summary": "Actualizar un cliente",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID del cliente"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Datos del cliente a actualizar",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Cliente"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cliente actualizado exitosamente",
+            "schema": {
+              "$ref": "#/definitions/Cliente"
+            }
+          },
+          "404": {
+            "description": "Cliente no encontrado"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Clientes"
+        ],
+        "summary": "Eliminar un cliente",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID del cliente"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cliente eliminado exitosamente"
+          },
+          "404": {
+            "description": "Cliente no encontrado"
+          }
+        }
+      }
+    },
+    "/encargados/": {
+      "post": {
+        "tags": [
+          "Encargados"
+        ],
+        "summary": "Crear un nuevo encargado",
+        "description": "Crea un encargado nuevo en la base de datos.",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Datos del encargado a crear",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Encargado"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Encargado creado exitosamente",
+            "schema": {
+              "$ref": "#/definitions/Encargado"
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Encargados"
+        ],
+        "summary": "Obtener todos los encargados",
+        "description": "Retorna una lista de todos los encargados registrados.",
+        "responses": {
+          "200": {
+            "description": "Lista de encargados obtenida con éxito.",
+            "schema": {
+              "$ref": "#/definitions/Encargado"
+            }
+          }
+        }
+      }
+    },
+    "/encargados/{id}": {
+      "get": {
+        "tags": [
+          "Encargados"
+        ],
+        "summary": "Obtener un encargado por ID",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID del encargado"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Encargado encontrado",
+            "schema": {
+              "$ref": "#/definitions/Encargado"
+            }
+          },
+          "404": {
+            "description": "Encargado no encontrado"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Encargados"
+        ],
+        "summary": "Actualizar un encargado",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID del encargado"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Datos del encargado a actualizar",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Encargado"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Encargado actualizado exitosamente",
+            "schema": {
+              "$ref": "#/definitions/Encargado"
+            }
+          },
+          "404": {
+            "description": "Encargado no encontrado"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Encargados"
+        ],
+        "summary": "Eliminar un encargado",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID del encargado"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Encargado eliminado exitosamente"
+          },
+          "404": {
+            "description": "Encargado no encontrado"
+          }
+        }
+      }
+    },
+    "/horarios/": {
+      "post": {
+        "tags": [
+          "Horarios"
+        ],
+        "summary": "Crear un nuevo horario",
+        "description": "Crea un horario nuevo en la base de datos.",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Datos del horario a crear",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Horario"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Horario creado exitosamente",
+            "schema": {
+              "$ref": "#/definitions/Horario"
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Horarios"
+        ],
+        "summary": "Obtener todos los horarios",
+        "description": "Retorna una lista de todos los horarios registrados.",
+        "responses": {
+          "200": {
+            "description": "Lista de horarios obtenida con éxito.",
+            "schema": {
+              "$ref": "#/definitions/Horario"
+            }
+          }
+        }
+      }
+    },
+    "/horarios/{id}": {
+      "get": {
+        "tags": [
+          "Horarios"
+        ],
+        "summary": "Obtener un horario por ID",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID del horario"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Horario encontrado",
+            "schema": {
+              "$ref": "#/definitions/Horario"
+            }
+          },
+          "404": {
+            "description": "Horario no encontrado"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Horarios"
+        ],
+        "summary": "Actualizar un horario",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID del horario"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Datos del horario a actualizar",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Horario"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Horario actualizado exitosamente",
+            "schema": {
+              "$ref": "#/definitions/Horario"
+            }
+          },
+          "404": {
+            "description": "Horario no encontrado"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Horarios"
+        ],
+        "summary": "Eliminar un horario",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID del horario"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Horario eliminado exitosamente"
+          },
+          "404": {
+            "description": "Horario no encontrado"
+          }
+        }
+      }
+    },
+    "/pagos/": {
+      "post": {
+        "tags": [
+          "Pagos"
+        ],
+        "summary": "Crear un nuevo pago",
+        "description": "Crea un pago nuevo en la base de datos.",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Datos del pago a crear",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Pago"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Pago creado exitosamente",
+            "schema": {
+              "$ref": "#/definitions/Pago"
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Pagos"
+        ],
+        "summary": "Obtener todos los pagos",
+        "description": "Retorna una lista de todos los pagos registrados.",
+        "responses": {
+          "200": {
+            "description": "Lista de pagos obtenida con éxito.",
+            "schema": {
+              "$ref": "#/definitions/Pago"
+            }
+          }
+        }
+      }
+    },
+    "/pagos/{id}": {
+      "get": {
+        "tags": [
+          "Pagos"
+        ],
+        "summary": "Obtener un pago por ID",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID del pago"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Pago encontrado",
+            "schema": {
+              "$ref": "#/definitions/Pago"
+            }
+          },
+          "404": {
+            "description": "Pago no encontrado"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Pagos"
+        ],
+        "summary": "Actualizar un pago",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID del pago"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Datos del pago a actualizar",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Pago"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Pago actualizado exitosamente",
+            "schema": {
+              "$ref": "#/definitions/Pago"
+            }
+          },
+          "404": {
+            "description": "Pago no encontrado"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Pagos"
+        ],
+        "summary": "Eliminar un pago",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID del pago"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Pago eliminado exitosamente"
+          },
+          "404": {
+            "description": "Pago no encontrado"
+          }
+        }
+      }
+    },
+    "/reservas/": {
+      "post": {
+        "tags": [
+          "Reservas"
+        ],
+        "summary": "Crear una nueva reserva",
+        "description": "Crea una reserva nueva en la base de datos.",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Datos de la reserva a crear",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Reserva"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Reserva creada exitosamente",
+            "schema": {
+              "$ref": "#/definitions/Reserva"
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Reservas"
+        ],
+        "summary": "Obtener todas las reservas",
+        "description": "Retorna una lista de todas las reservas registradas.",
+        "responses": {
+          "200": {
+            "description": "Lista de reservas obtenida con éxito.",
+            "schema": {
+              "$ref": "#/definitions/Reserva"
+            }
+          }
+        }
+      }
+    },
+    "/reservas/{id}": {
+      "get": {
+        "tags": [
+          "Reservas"
+        ],
+        "summary": "Obtener una reserva por ID",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID de la reserva"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Reserva encontrada",
+            "schema": {
+              "$ref": "#/definitions/Reserva"
+            }
+          },
+          "404": {
+            "description": "Reserva no encontrada"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Reservas"
+        ],
+        "summary": "Actualizar una reserva",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID de la reserva"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Datos de la reserva a actualizar",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Reserva"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Reserva actualizada exitosamente",
+            "schema": {
+              "$ref": "#/definitions/Reserva"
+            }
+          },
+          "404": {
+            "description": "Reserva no encontrada"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Reservas"
+        ],
+        "summary": "Eliminar una reserva",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID de la reserva"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Reserva eliminada exitosamente"
+          },
+          "404": {
+            "description": "Reserva no encontrada"
+          }
+        }
+      }
+    },
+    "/usuarios/": {
+      "post": {
+        "tags": [
+          "Usuarios"
+        ],
+        "summary": "Crear un nuevo usuario",
+        "description": "Crea un usuario nuevo en la base de datos.",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Datos del usuario a crear",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Usuario"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Usuario creado exitosamente",
+            "schema": {
+              "$ref": "#/definitions/Usuario"
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Usuarios"
+        ],
+        "summary": "Obtener todos los usuarios",
+        "description": "Retorna una lista de todos los usuarios registrados.",
+        "responses": {
+          "200": {
+            "description": "Lista de usuarios obtenida con éxito.",
+            "schema": {
+              "$ref": "#/definitions/Usuario"
+            }
+          }
+        }
+      }
+    },
+    "/usuarios/{id}": {
+      "get": {
+        "tags": [
+          "Usuarios"
+        ],
+        "summary": "Obtener un usuario por ID",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID del usuario"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Usuario encontrado",
+            "schema": {
+              "$ref": "#/definitions/Usuario"
+            }
+          },
+          "404": {
+            "description": "Usuario no encontrado"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Usuarios"
+        ],
+        "summary": "Actualizar un usuario",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID del usuario"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Datos del usuario a actualizar",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Usuario"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Usuario actualizado exitosamente",
+            "schema": {
+              "$ref": "#/definitions/Usuario"
+            }
+          },
+          "404": {
+            "description": "Usuario no encontrado"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Usuarios"
+        ],
+        "summary": "Eliminar un usuario",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID del usuario"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Usuario eliminado exitosamente"
+          },
+          "404": {
+            "description": "Usuario no encontrado"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Cancha": {
+      "type": "object",
+      "properties": {
+        "tipo": {
+          "type": "string",
+          "example": "Fútbol 5"
+        },
+        "ubicacion": {
+          "type": "string",
+          "example": "Av. Siempre Viva 123"
+        },
+        "dimensiones": {
+          "type": "string",
+          "example": "40x20"
+        },
+        "imagen": {
+          "type": "string",
+          "example": "http://ejemplo.com/imagen.jpg"
+        },
+        "estado": {
+          "type": "string",
+          "example": "disponible"
+        }
+      }
+    },
+    "Cliente": {
+      "type": "object",
+      "properties": {
+        "nombre": {
+          "type": "string",
+          "example": "Juan"
+        },
+        "apellido": {
+          "type": "string",
+          "example": "Pérez"
+        },
+        "correo": {
+          "type": "string",
+          "example": "juan@mail.com"
+        },
+        "contraseña": {
+          "type": "string",
+          "example": "123456"
+        },
+        "telefono": {
+          "type": "string",
+          "example": "123456789"
+        },
+        "antecedente": {
+          "type": "string",
+          "example": "Sin antecedentes"
+        }
+      }
+    },
+    "Encargado": {
+      "type": "object",
+      "properties": {
+        "nombre": {
+          "type": "string",
+          "example": "Pedro"
+        },
+        "apellido": {
+          "type": "string",
+          "example": "Gómez"
+        },
+        "correo": {
+          "type": "string",
+          "example": "pedro@mail.com"
+        },
+        "contraseña": {
+          "type": "string",
+          "example": "abcdef"
+        },
+        "legajo": {
+          "type": "string",
+          "example": "E123"
+        }
+      }
+    },
+    "Horario": {
+      "type": "object",
+      "properties": {
+        "fecha": {
+          "type": "string",
+          "example": "2025-06-13T00:00:00.000Z"
+        },
+        "horaInicio": {
+          "type": "string",
+          "example": "14:00"
+        },
+        "horaFin": {
+          "type": "string",
+          "example": "15:00"
+        },
+        "estado": {
+          "type": "string",
+          "example": "disponible"
+        }
+      }
+    },
+    "Pago": {
+      "type": "object",
+      "properties": {
+        "importeTotal": {
+          "type": "number",
+          "example": 1000
+        },
+        "importePendiente": {
+          "type": "number",
+          "example": 500
+        },
+        "estado": {
+          "type": "string",
+          "example": "pendiente"
+        }
+      }
+    },
+    "Reserva": {
+      "type": "object",
+      "properties": {
+        "horarioReservado": {
+          "type": "string",
+          "example": "60c72b2f9b1e8e001c8e4b8a"
+        },
+        "cancha": {
+          "type": "string",
+          "example": "60c72b2f9b1e8e001c8e4b8b"
+        },
+        "cliente": {
+          "type": "string",
+          "example": "60c72b2f9b1e8e001c8e4b8c"
+        },
+        "pago": {
+          "type": "string",
+          "example": "60c72b2f9b1e8e001c8e4b8d"
+        }
+      }
+    },
+    "Usuario": {
+      "type": "object",
+      "properties": {
+        "nombre": {
+          "type": "string",
+          "example": "Usuario"
+        },
+        "apellido": {
+          "type": "string",
+          "example": "Apellido"
+        },
+        "correo": {
+          "type": "string",
+          "example": "usuario@mail.com"
+        },
+        "contraseña": {
+          "type": "string",
+          "example": "clave123"
+        }
+      }
+    }
+  }
+}
