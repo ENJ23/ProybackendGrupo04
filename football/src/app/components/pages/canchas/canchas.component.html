@@ -1,0 +1,144 @@
+<div class="body-container">
+  <div class="container py-5">
+    <h1 class="text-center mb-5 fw-bold">Nuestras Canchas</h1>
+
+    <div *ngIf="loading" class="text-center my-5">
+      <div class="spinner-border text-success" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+    </div>
+    <div *ngIf="error" class="alert alert-danger text-center">{{ error }}</div>
+
+    <div class="row g-4" *ngIf="!loading && !error">
+      <div class="col-md-4 mb-4" *ngFor="let cancha of canchas">
+        <div class="card h-100 border-0 shadow-sm">
+          <div class="position-relative">
+            <img [src]="cancha.imagen || 'assets/default-cancha.jpg'" class="card-img-top" [alt]="cancha.tipo">
+            <span class="position-absolute top-0 end-0 bg-success text-white px-2 py-1 m-2 rounded">
+              {{ cancha.tipo }}
+            </span>
+          </div>
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title fw-bold">{{ cancha.nombre }}</h5>
+            <p class="card-text text-muted">
+              <i class="fas fa-map-marker-alt text-success me-2"></i>{{ cancha.ubicacion }}
+            </p>
+            <div class="d-flex align-items-center mb-3 p-2 bg-light rounded">
+              <i class="fas fa-tag text-success me-2"></i>
+              <div>
+                <div class="fw-bold">
+                  {{ cancha.estado === 'disponible' ? ('$' + cancha.precioPorHora) : 'No disponible' }}
+                </div>
+                <small class="text-muted">por hora</small>
+              </div>
+            </div>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <span class="badge bg-light text-dark">
+                <i class="fas fa-users me-1"></i>
+                <!-- Puedes ajustar esto si tienes info de jugadores -->
+                {{ cancha.tipo === 'Fútbol 5' ? '5 jugadores' : cancha.tipo === 'Fútbol 7' ? '7 jugadores' : cancha.tipo === 'Fútbol 11' ? '11 jugadores' : '' }}
+              </span>
+              <span class="badge bg-light text-dark">
+                <i class="fas fa-ruler-combined me-1"></i> {{ cancha.dimensiones }}
+              </span>
+            </div>
+            <div class="mt-auto">
+              <button class="btn btn-success w-100"
+                      [disabled]="cancha.estado !== 'disponible'"
+                      (click)="abrirModalHorarios(cancha)">
+                <i class="far fa-calendar-alt me-2"></i>
+                {{ cancha.estado === 'disponible' ? 'Ver Horarios' : 'No disponible' }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="canchas.length === 0" class="text-center text-muted w-100">
+        No hay canchas disponibles.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="horariosModal" tabindex="-1" aria-labelledby="horariosModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title fw-bold" id="horariosModalLabel">
+          <i class="fas fa-calendar-day me-2"></i>Horarios
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label for="fechaSeleccionada" class="form-label fw-bold">
+            Selecciona una fecha:
+          </label>
+          <input
+            type="date"
+            id="fechaSeleccionada"
+            class="form-control"
+            [min]="minFecha"
+            [max]="maxFecha"
+            [(ngModel)]="selectedFecha"
+            (change)="onFechaChange()"
+          />
+        </div>
+        <div class="table-responsive">
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th>Fecha</th>
+                <th>Hora</th>
+                <th>Estado</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let horario of horariosDisponibles">
+
+
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div *ngIf="loadingHorarios" class="text-center my-3">
+          <div class="spinner-border text-success"></div>
+        </div>
+        <div *ngIf="!loadingHorarios">
+          <div *ngIf="horariosDisponibles.length > 0; else noDisponibles">
+            <div *ngFor="let hora of horariosDisponibles" class="mb-2">
+              <button
+                class="btn"
+                [ngClass]="horaSeleccionada === hora ? 'btn-success' : 'btn-outline-success'"
+                (click)="seleccionarHora(hora)">
+                {{ hora }}
+              </button>
+            </div>
+          </div>
+          <ng-template #noDisponibles>
+            <div class="alert alert-warning text-center">No hay horarios disponibles para esta fecha.</div>
+          </ng-template>
+        </div>
+        <!-- Agrega esto en el modal, antes de los botones de horario -->
+        <div class="mb-3">
+          <label for="cantidadHoras" class="form-label fw-bold">¿Cuántas horas deseas reservar?</label>
+          <select id="cantidadHoras" class="form-select" [(ngModel)]="cantidadHoras">
+            <option *ngFor="let h of [1,2,3,4]" [value]="h">{{ h }} hora{{ h > 1 ? 's' : '' }}</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer d-flex justify-content-between">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+          <i class="fas fa-times me-2"></i>Cerrar
+        </button>
+        <button
+          class="btn btn-success"
+          [disabled]="!horaSeleccionada"
+          (click)="reservar()">
+          <i class="fas fa-calendar-check me-2"></i>Reservar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

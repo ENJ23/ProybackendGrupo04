@@ -1,0 +1,122 @@
+<div class="body-container">
+<div class="container py-4">
+    <div class="row justify-content-center">
+      <div class="col-12">
+        <div class="card shadow-sm border-0 rounded-3 overflow-hidden">
+          <div class="card-header bg-success text-white py-3">
+            <h4 class="mb-0">
+              <i class="fas fa-clipboard-list me-2"></i>Ver Antecedentes
+            </h4>
+          </div>
+          <div class="card-body p-4">
+            <!-- Búsqueda de cliente -->
+            <div class="card border-0 shadow-sm mb-4">
+              <div class="card-header bg-light">
+                <h5 class="mb-0 text-white">Buscar Cliente</h5>
+              </div>
+              <div class="card-body">
+                <div class="row g-3">
+                  <div class="col-md-8">
+                    <label class="form-label fw-semibold">Nombre del Cliente</label>
+                    <div class="input-group">
+                      <span class="input-group-text bg-light">
+                        <i class="fas fa-user text-success"></i>
+                      </span>
+                      <input type="text" class="form-control" placeholder="Ingrese nombre completo del cliente">
+                      <button class="btn btn-success" type="button">
+                        <i class="fas fa-search me-2"></i>Buscar
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+  
+            <!-- Resultados de búsqueda -->
+            <div class="card border-0 shadow-sm mb-4">
+              <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                <h5 class="mb-0 text-white">Información del Cliente</h5>
+                <span class="badge bg-success"> antecedente</span>
+              </div>
+              <div class="card-body">
+                <div class="row mb-4">
+                  <div class="col-md-8">
+                    <div class="d-flex align-items-center">
+                      <div class="avatar bg-success text-white rounded-circle me-3" style="width: 64px; height: 64px; font-size: 1.5rem; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-user"></i>
+                      </div>
+                      <div>
+                        <h4 class="mb-1">Juan Carlos Pérez</h4>
+                        <div class="d-flex flex-wrap gap-3">
+                          <div><i class="fas fa-phone text-muted me-2"></i><span>987 654 321</span></div>
+                          <div><i class="fas fa-envelope text-muted me-2"></i><span>juan.perez&#64;email.com</span></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+  
+                <div class="table-responsive">
+                  <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                      <tr>
+                        <th>Antecedentes</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <!-- Antecedente 1 -->
+                      <tr>
+                        <td>No se presentó a la reserva sin previo aviso</td>
+                      </tr>
+                    </tbody>
+                  </table>
+              </div>
+              <div class="d-flex justify-content-end mt-3">
+                <button class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#nuevoAntecedenteModal" >
+                  <i class="fas fa-plus-circle me-2"></i>Agregar Antecedente
+                </button>
+              </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+  <!-- Modal para antecedente -->
+  <div class="modal fade" id="nuevoAntecedenteModal" tabindex="-1" aria-labelledby="nuevoAntecedenteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header bg-success text-white">
+          <h5 class="modal-title" id="nuevoAntecedenteModalLabel">
+            <i class="fas fa-plus-circle me-2"></i>Nuevo Antecedente
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Cliente</label>
+              <input type="text" class="form-control" value="Juan Carlos Pérez Gómez" disabled>
+            </div>
+            
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Descripción</label>
+              <textarea class="form-control" rows="4" placeholder="Ingrese los detalles del antecedente"></textarea>
+            </div>
+            
+            <div class="d-flex justify-content-end gap-2 mt-4">
+              <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                <i class="fas fa-times me-2"></i>Cancelar
+              </button>
+              <button type="submit" class="btn btn-success">
+                <i class="fas fa-save me-2"></i>Guardar Antecedente
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>

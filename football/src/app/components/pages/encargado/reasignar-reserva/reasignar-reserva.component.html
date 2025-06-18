@@ -1,0 +1,191 @@
+<div class="body-container">
+<div class="container py-4">
+    <div class="row justify-content-center">
+      <div class="col-12">
+        <div class="card shadow-sm border-0 rounded-3 overflow-hidden">
+          <div class="card-header bg-success text-white py-3">
+            <h4 class="mb-0">
+              <i class="fas fa-exchange-alt me-2"></i>Reasignar Reserva
+            </h4>
+          </div>
+          <div class="card-body">
+                <form class="row g-3">
+                  <div class="col-md-6">
+                    <label class="form-label fw-semibold">Cancha</label>
+                    <select class="form-select">
+                      <option value="" selected disabled>Seleccione una cancha</option>
+                      <option value="1">Cancha 1 - Fútbol 5</option>
+                      <option value="2">Cancha 2 - Fútbol 7</option>
+                      <option value="3">Cancha 3 - Fútbol 11</option>
+                    </select>
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label fw-semibold">Fecha</label>
+                    <input type="date" class="form-control">
+                  </div>
+                  <div class="col-md-2 d-flex align-items-end">
+                    <button class="btn btn-success w-100" type="submit">
+                      <i class="fas fa-search me-2"></i>Buscar
+                    </button>
+                  </div>
+                </form>
+              </div>
+          </div>
+  
+            <!-- Lista de reservas -->
+            <div class="card border-0 shadow-sm">
+              <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                <h5 class="mb-0 text-white">Reservas del día</h5>
+                <span class="badge bg-success">05 de Junio, 2025</span>
+              </div>
+              <div class="card-body p-0">
+                <div class="table-responsive">
+                  <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                      <tr>
+                        <th>Hora</th>
+                        <th>Cliente</th>
+                        <th>Teléfono</th>
+                        <th class="text-center">Acciones</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <!-- Reserva 1 -->
+                      <tr>
+                        <td class="fw-semibold">14:00 - 16:00</td>
+                        <td>
+                          <div class="d-flex align-items-center">
+                            <div class="avatar bg-success text-white rounded-circle me-2" style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;">
+                              <i class="fas fa-user"></i>
+                            </div>
+                            <div>
+                              <div class="fw-semibold">Juan Pérez</div>
+                            </div>
+                          </div>
+                        </td>
+                        <td>987654321</td>
+                        <td class="text-center">
+                          <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#reasignarModal">
+                            <i class="fas fa-exchange-alt me-1"></i>Reasignar
+                          </button>
+                        </td>
+                      </tr>
+                      
+                      <!-- Reserva 2 -->
+                      <tr>
+                        <td class="fw-semibold">16:00 - 18:00</td>
+                        <td>
+                          <div class="d-flex align-items-center">
+                            <div class="avatar bg-primary text-white rounded-circle me-2" style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;">
+                              <i class="fas fa-user"></i>
+                            </div>
+                            <div>
+                              <div class="fw-semibold">María Gómez</div>
+                            </div>
+                          </div>
+                        </td>
+                        <td>987123456</td>
+                        <td class="text-center">
+                          <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#reasignarModal">
+                            <i class="fas fa-exchange-alt me-1"></i>Reasignar
+                          </button>
+                        </td>
+                      </tr>
+                      
+                      <!-- Reserva 3 -->
+                      <tr>
+                        <td class="fw-semibold">18:00 - 20:00</td>
+                        <td>
+                          <div class="d-flex align-items-center">
+                            <div class="avatar bg-info text-white rounded-circle me-2" style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;">
+                              <i class="fas fa-user"></i>
+                            </div>
+                            <div>
+                              <div class="fw-semibold">Carlos López</div>
+                            </div>
+                          </div>
+                        </td>
+                        <td>987654123</td>
+                        <td class="text-center">
+                          <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#reasignarModal">
+                            <i class="fas fa-exchange-alt me-1"></i>Reasignar
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+  
+  <!-- Modal de Reasignación -->
+  <div class="modal fade" id="reasignarModal" tabindex="-1" aria-labelledby="reasignarModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header bg-success text-white">
+          <h5 class="modal-title" id="reasignarModalLabel">
+            <i class="fas fa-exchange-alt me-2"></i>Reasignar Reserva
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-4">
+            <h6 class="fw-semibold">Detalles de la reserva actual</h6>
+            <div class="card bg-light">
+              <div class="card-body">
+                <div class="d-flex justify-content-between mb-2">
+                  <span class="text-muted">Cliente:</span>
+                  <span class="fw-semibold">Juan Pérez</span>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                  <span class="text-muted">Cancha:</span>
+                  <span class="fw-semibold">Cancha 1 - Fútbol 5</span>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                  <span class="text-muted">Fecha actual:</span>
+                  <span class="fw-semibold">05/06/2025</span>
+                </div>
+                <div class="d-flex justify-content-between">
+                  <span class="text-muted">Hora actual:</span>
+                  <span class="fw-semibold">14:00 - 16:00</span>
+                </div>
+              </div>
+            </div>
+          </div>
+  
+          <form>
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Nueva Fecha</label>
+              <input type="date" class="form-control" value="2025-06-05">
+            </div>
+            
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Nuevo Horario</label>
+              <select class="form-select">
+                <option value="" disabled>Seleccione un horario disponible</option>
+                <option value="1">10:00 - 12:00 (Disponible)</option>
+                <option value="2">12:00 - 14:00 (Disponible)</option>
+                <option value="3" selected>14:00 - 16:00 (Actual)</option>
+                <option value="4">16:00 - 18:00 (Ocupado)</option>
+                <option value="5">18:00 - 20:00 (Ocupado)</option>
+                <option value="6">20:00 - 22:00 (Disponible)</option>
+              </select>
+            </div>
+            
+            <div class="d-flex justify-content-end gap-2 mt-4">
+              <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                <i class="fas fa-times me-2"></i>Cancelar
+              </button>
+              <button type="submit" class="btn btn-success">
+                <i class="fas fa-check-circle me-2"></i>Confirmar Reasignación
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
