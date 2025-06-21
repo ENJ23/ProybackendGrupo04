@@ -63,77 +63,134 @@
 <!-- Modal -->
 <div class="modal fade" id="horariosModal" tabindex="-1" aria-labelledby="horariosModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title fw-bold" id="horariosModalLabel">
-          <i class="fas fa-calendar-day me-2"></i>Horarios
+    <div class="modal-content shadow-lg border-0 rounded-4">
+      <div class="modal-header bg-success bg-gradient text-white rounded-top-4">
+        <h5 class="modal-title fw-bold d-flex align-items-center" id="horariosModalLabel">
+          <i class="fas fa-calendar-day me-2"></i> Horarios disponibles
         </h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
-        <div class="mb-3">
+      <div class="modal-body px-4 py-4">
+
+        <!-- Resumen de la cancha seleccionada -->
+        <div *ngIf="selectedCancha" class="mb-4 p-3 rounded-4 bg-light-subtle border border-success-subtle d-flex align-items-center gap-3 shadow-sm cancha-resumen">
+          <img [src]="selectedCancha.imagen || 'assets/default-cancha.jpg'" alt="cancha" class="rounded-3 border" style="width:70px; height:70px; object-fit:cover;">
+          <div>
+            <div class="fw-bold fs-5 text-success mb-1">{{ selectedCancha.nombre }}</div>
+            <div class="small text-muted"><i class="fas fa-map-marker-alt me-1"></i> {{ selectedCancha.ubicacion }}</div>
+            <div class="small text-muted"><i class="fas fa-ruler-combined me-1"></i> {{ selectedCancha.dimensiones }}</div>
+          </div>
+        </div>
+
+        <!-- Selección de fecha -->
+        <div class="mb-4">
           <label for="fechaSeleccionada" class="form-label fw-bold">
-            Selecciona una fecha:
+            <i class="fas fa-calendar-alt me-2 text-success"></i>Selecciona una fecha:
           </label>
-          <input
-            type="date"
-            id="fechaSeleccionada"
-            class="form-control"
-            [min]="minFecha"
-            [max]="maxFecha"
-            [(ngModel)]="selectedFecha"
-            (change)="onFechaChange()"
-          />
+          <div class="input-group input-group-lg shadow-sm rounded-3">
+            <span class="input-group-text bg-white border-success"><i class="fas fa-calendar-alt text-success"></i></span>
+            <input
+              type="date"
+              id="fechaSeleccionada"
+              class="form-control border-success bg-light"
+              [min]="minFecha"
+              [max]="maxFecha"
+              [(ngModel)]="selectedFecha"
+              (ngModelChange)="onFechaChange()"
+            />
+          </div>
         </div>
-        <div class="table-responsive">
-          <table class="table table-bordered table-striped">
-            <thead>
-              <tr>
-                <th>Fecha</th>
-                <th>Hora</th>
-                <th>Estado</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let horario of horariosDisponibles">
 
-
-              </tr>
-            </tbody>
-          </table>
+        <!-- Selección de cantidad de horas -->
+        <div class="mb-4">
+          <label for="cantidadHoras" class="form-label fw-bold">
+            <i class="fas fa-clock me-2 text-success"></i>¿Cuántas horas deseas reservar?
+          </label>
+          <div class="input-group input-group-lg shadow-sm rounded-3" style="max-width:220px;">
+            <span class="input-group-text bg-white border-success"><i class="fas fa-hourglass-half text-success"></i></span>
+            <select id="cantidadHoras" class="form-select border-success bg-light" [(ngModel)]="cantidadHoras">
+              <option *ngFor="let h of [1,2,3,4]" [value]="h">{{ h }} hora{{ h > 1 ? 's' : '' }}</option>
+            </select>
+          </div>
         </div>
-        <div *ngIf="loadingHorarios" class="text-center my-3">
+
+        <hr class="my-4">
+
+        <!-- Horarios disponibles -->
+        <div *ngIf="loadingHorarios" class="text-center my-4">
           <div class="spinner-border text-success"></div>
         </div>
         <div *ngIf="!loadingHorarios">
           <div *ngIf="horariosDisponibles.length > 0; else noDisponibles">
-            <div *ngFor="let hora of horariosDisponibles" class="mb-2">
-              <button
-                class="btn"
-                [ngClass]="horaSeleccionada === hora ? 'btn-success' : 'btn-outline-success'"
-                (click)="seleccionarHora(hora)">
-                {{ hora }}
-              </button>
+            <div class="row g-3 justify-content-center">
+              <div class="col-6 col-md-4 col-lg-3" *ngFor="let hora of horariosDisponibles">
+                <div
+                  class="card card-horario shadow-sm border-0 text-center p-3 animate-horario"
+                  [ngClass]="horaSeleccionada === hora ? 'bg-success text-white border-success selected-horario' : 'bg-light'"
+                  (click)="seleccionarHora(hora)">
+                  <div class="fw-bold fs-5">
+                    <i class="far fa-clock me-1"></i>{{ hora }}
+                  </div>
+                  <div class="small mt-1">
+                    <span class="badge"
+                      [ngClass]="horaSeleccionada === hora ? 'bg-light text-success' : 'bg-success-subtle text-success'">
+                      {{ horaSeleccionada === hora ? 'Seleccionado' : 'Disponible' }}
+                    </span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
           <ng-template #noDisponibles>
-            <div class="alert alert-warning text-center">No hay horarios disponibles para esta fecha.</div>
+            <div class="alert alert-warning text-center mt-4 rounded-4 shadow-sm">
+              <i class="fas fa-exclamation-circle me-2"></i>No hay horarios disponibles para esta fecha.
+            </div>
           </ng-template>
         </div>
-        <!-- Agrega esto en el modal, antes de los botones de horario -->
-        <div class="mb-3">
-          <label for="cantidadHoras" class="form-label fw-bold">¿Cuántas horas deseas reservar?</label>
-          <select id="cantidadHoras" class="form-select" [(ngModel)]="cantidadHoras">
-            <option *ngFor="let h of [1,2,3,4]" [value]="h">{{ h }} hora{{ h > 1 ? 's' : '' }}</option>
-          </select>
+
+        <hr class="my-4">
+
+        <!-- Tabla de horarios -->
+        <div class="table-responsive">
+          <table class="table table-bordered table-striped align-middle shadow-sm rounded-4 overflow-hidden">
+            <thead class="table-success">
+              <tr>
+                <th><i class="fas fa-calendar-day"></i> Fecha</th>
+                <th><i class="far fa-clock"></i> Hora</th>
+                <th><i class="fas fa-check-circle"></i> Estado</th>
+                <th>Acción</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let bloque of getBloquesHorarios()">
+                <td>{{ selectedFecha }}</td>
+                <td>{{ bloque }}</td>
+                <td>
+                  <span *ngIf="horariosReservados.includes(bloque)" class="badge bg-danger">Ocupado</span>
+                  <span *ngIf="!horariosReservados.includes(bloque)" class="badge bg-success">Disponible</span>
+                </td>
+                <td>
+                  <button
+                    class="btn btn-success btn-sm"
+                    [disabled]="horariosReservados.includes(bloque) || (selectedFecha === getHoy() && +bloque.split(':')[0] <= (nowHour || 0))"
+                    (click)="seleccionarHora(bloque)">
+                    Reservar
+                  </button>
+                </td>
+              </tr>
+              <tr *ngIf="getBloquesHorarios().length === 0">
+                <td colspan="4" class="text-center text-muted">No hay horarios para mostrar.</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
-      <div class="modal-footer d-flex justify-content-between">
+      <div class="modal-footer d-flex justify-content-between bg-light rounded-bottom-4">
         <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
           <i class="fas fa-times me-2"></i>Cerrar
         </button>
         <button
-          class="btn btn-success"
+          class="btn btn-success px-4"
           [disabled]="!horaSeleccionada"
           (click)="reservar()">
           <i class="fas fa-calendar-check me-2"></i>Reservar

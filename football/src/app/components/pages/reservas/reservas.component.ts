@@ -107,15 +107,6 @@ export class ReservasComponent implements OnInit, OnDestroy {
     });
   }
 
-  // Simulación de confirmación de reserva (en la práctica, esto lo haría el webhook)
-  confirmarReservaManual() {
-    this.reservaConfirmada = true;
-    this.reserva = {
-      numero: Math.floor(Math.random() * 1000000), // Simulación de número de reserva
-      // Puedes agregar más datos si lo necesitas
-    };
-  }
-
   imprimirComprobante() {
     window.print();
   }

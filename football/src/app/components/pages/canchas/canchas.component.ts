@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms'; // <-- Importa esto
+import { FormsModule } from '@angular/forms';
 import { CanchasService } from '../../../services/canchas.service';
 import { HorariosService } from '../../../services/horarios.service';
 import { Router } from '@angular/router';
@@ -9,7 +9,7 @@ import { HttpClient } from '@angular/common/http';
 @Component({
   selector: 'app-canchas',
   standalone: true,
-  imports: [CommonModule, FormsModule], // <-- Agrega FormsModule aquí
+  imports: [CommonModule, FormsModule],
   templateUrl: './canchas.component.html',
   styleUrl: './canchas.component.css'
 })
@@ -20,21 +20,23 @@ export class CanchasComponent implements OnInit {
 
   selectedCancha: any = null;
   horariosDisponibles: string[] = [];
-  selectedFecha: string = ''; // formato 'YYYY-MM-DD'
+  selectedFecha: string = '';
   loadingHorarios = false;
 
   minFecha: string = '';
   maxFecha: string = '';
 
   horaSeleccionada: string | null = null;
-  cantidadHoras: number = 1; // Nuevo campo
+  cantidadHoras: number = 1;
 
   horariosReservados: string[] = [];
+
+  nowHour = new Date().getHours();
 
   constructor(
     private canchasService: CanchasService,
     private horariosService: HorariosService,
-    private router: Router, // <-- agrega esto
+    private router: Router,
     private http: HttpClient
   ) {}
 
@@ -57,7 +59,7 @@ export class CanchasComponent implements OnInit {
     this.error = null;
     this.canchasService.getCanchas().subscribe({
       next: (data: any) => {
-        this.canchas = data.data || []; // Asegura que sea un array
+        this.canchas = data.data || [];
         this.loading = false;
       },
       error: (err) => {
@@ -72,15 +74,42 @@ export class CanchasComponent implements OnInit {
     this.selectedCancha = cancha;
     this.setFechasLimite();
     this.selectedFecha = this.getHoy();
+    this.horaSeleccionada = null;
+    this.cantidadHoras = 1;
+    this.updateNowHour();
     this.loadingHorarios = true;
     this.horariosDisponibles = [];
     this.cargarHorarios();
   }
 
   onFechaChange() {
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0);
+    const fechaSeleccionada = new Date(this.selectedFecha);
+    fechaSeleccionada.setHours(0, 0, 0, 0);
+
+    this.horaSeleccionada = null;
+    this.updateNowHour();
+
+    if (fechaSeleccionada < hoy) {
+      this.horariosDisponibles = [];
+      this.horariosReservados = [];
+      this.loadingHorarios = false;
+      return;
+    }
+
     this.loadingHorarios = true;
     this.horariosDisponibles = [];
     this.cargarHorarios();
+  }
+
+  updateNowHour() {
+    // Actualiza la hora actual solo si la fecha seleccionada es hoy
+    if (this.selectedFecha === this.getHoy()) {
+      this.nowHour = new Date().getHours();
+    } else {
+      this.nowHour = 0;
+    }
   }
 
   cargarHorarios() {
@@ -105,17 +134,34 @@ export class CanchasComponent implements OnInit {
         this.horariosDisponibles = [];
         this.horariosReservados = [];
         this.loadingHorarios = false;
+        this.error = 'No se pudieron cargar los horarios. Intenta nuevamente.';
       }
     });
   }
 
+  // Genera todos los bloques horarios posibles (de 10:00 a 21:00)
+  getBloquesHorarios(): string[] {
+    const bloques: string[] = [];
+    for (let h = 10; h < 22; h++) {
+      bloques.push(h.toString().padStart(2, '0') + ':00');
+    }
+    return bloques;
+  }
+
+  // Solo los horarios disponibles para reservar (para las tarjetas)
   generarHorariosDisponibles(reservados: string[]): string[] {
     const bloques: string[] = [];
-    for (let h = 10; h <= 22 - this.cantidadHoras; h++) {
+    const esHoy = this.selectedFecha === this.getHoy();
+    const horaActual = new Date().getHours();
+    const cantidad = Math.max(1, Number(this.cantidadHoras) || 1);
+
+    for (let h = 10; h < 23 - cantidad; h++) { // < en vez de <=
+      if (esHoy && h <= horaActual) continue;
+
       let disponible = true;
-      for (let offset = 0; offset < this.cantidadHoras; offset++) {
+      for (let offset = 0; offset < cantidad; offset++) {
         const hora = (h + offset).toString().padStart(2, '0') + ':00';
-        if (reservados.map(r => r.slice(0,5)).includes(hora)) {
+        if (reservados.includes(hora)) {
           disponible = false;
           break;
         }
@@ -124,20 +170,32 @@ export class CanchasComponent implements OnInit {
         bloques.push(h.toString().padStart(2, '0') + ':00');
       }
     }
+    console.log("cantidad", cantidad);
+    console.log("reservados", reservados);
+    console.log("bloques", bloques);
+    console.log('selectedFecha', this.selectedFecha, 'getHoy()', this.getHoy(), 'esHoy', esHoy);
     return bloques;
   }
 
   getHoy(): string {
     const hoy = new Date();
-    return hoy.toISOString().split('T')[0]; // 'YYYY-MM-DD'
+    hoy.setHours(0, 0, 0, 0);
+    // Ajusta a la zona local, no UTC
+    const year = hoy.getFullYear();
+    const month = (hoy.getMonth() + 1).toString().padStart(2, '0');
+    const day = hoy.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
   }
 
   abrirModalHorarios(cancha: any) {
     this.selectedCancha = cancha;
     this.setFechasLimite();
-    this.selectedFecha = ''; // No hay fecha seleccionada aún
+    this.selectedFecha = '';
+    this.horaSeleccionada = null;
+    this.cantidadHoras = 1;
     this.horariosDisponibles = [];
     this.loadingHorarios = false;
+    this.updateNowHour();
     // Abre el modal
     const modalElement = document.getElementById('horariosModal');
     if (modalElement) {
@@ -169,6 +227,11 @@ export class CanchasComponent implements OnInit {
         alert(`El bloque ${bloque} ya está ocupado. Por favor, elige otro rango.`);
         return;
       }
+      // Si es hoy, no permitir reservar bloques pasados
+      if (this.selectedFecha === this.getHoy() && h <= this.nowHour) {
+        alert(`No puedes reservar bloques pasados para hoy.`);
+        return;
+      }
     }
 
     // Cierra el modal de Bootstrap si está abierto
@@ -191,13 +254,5 @@ export class CanchasComponent implements OnInit {
         cantidadHoras: cantidadHorasNum
       }
     });
-  }
-
-  onSeleccionarCanchaYFecha(canchaId: string, fecha: string) {
-    this.http.get<any>(`/api/horarios/filtrar?canchaId=${canchaId}&fecha=${fecha}`)
-      .subscribe(resp => {
-        // Extrae solo las horas de inicio de los horarios ocupados
-        this.horariosReservados = resp.data.map((h: any) => h.horaInicio);
-      });
   }
 }

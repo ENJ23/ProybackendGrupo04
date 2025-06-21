@@ -179,3 +179,142 @@ tbody tr:hover {
   color: #6c757d;
   transform: translateY(-1px);
 }
+
+.card-horario {
+  border-radius: 1rem;
+  cursor: pointer;
+  transition: box-shadow 0.2s, background 0.2s, color 0.2s;
+  border: 2px solid transparent;
+  min-height: 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.card-horario.bg-success {
+  box-shadow: 0 2px 12px rgba(25,135,84,0.15);
+  border: 2px solid #198754;
+}
+.card-horario:hover {
+  box-shadow: 0 4px 16px rgba(25,135,84,0.18);
+  border: 2px solid #198754;
+  background: #e9fbe9;
+  color: #198754;
+}
+.card-horario.bg-success:hover {
+  background: #198754;
+  color: #fff;
+}
+
+.modal-content {
+  border-radius: 1.5rem;
+  box-shadow: 0 8px 32px rgba(25,135,84,0.12);
+}
+
+.modal-header.bg-success {
+  background: linear-gradient(90deg, #198754 60%, #43c59e 100%);
+  color: #fff;
+  border-bottom: none;
+}
+
+.modal-footer {
+  border-top: none;
+  border-radius: 0 0 1.5rem 1.5rem;
+}
+
+.table thead.table-success th {
+  background: #e9fbe9;
+  color: #198754;
+  border-top: none;
+}
+
+.table th, .table td {
+  text-align: center;
+  vertical-align: middle;
+}
+
+input[type="date"].form-control {
+  max-width: 250px;
+  display: inline-block;
+}
+
+select.form-select {
+  max-width: 120px;
+  display: inline-block;
+}
+
+hr {
+  border-top: 1.5px solid #e9ecef;
+}
+
+.bg-light-subtle {
+  background: #f8fafb !important;
+}
+
+.border-success-subtle {
+  border-color: #b6e2d6 !important;
+}
+
+.cancha-resumen img {
+  box-shadow: 0 2px 8px rgba(25,135,84,0.08);
+}
+
+.selected-horario {
+  transform: scale(1.04);
+  box-shadow: 0 6px 24px rgba(25,135,84,0.18) !important;
+  border-width: 2.5px !important;
+}
+
+.animate-horario {
+  transition: 
+    box-shadow 0.25s cubic-bezier(.4,2,.6,1),
+    background 0.2s,
+    color 0.2s,
+    transform 0.18s cubic-bezier(.4,2,.6,1);
+}
+
+.input-group-lg > .form-control,
+.input-group-lg > .form-select,
+.input-group-lg > .input-group-text {
+  font-size: 1.1rem;
+  padding: 0.7rem 1rem;
+  border-radius: 0.75rem;
+}
+
+.input-group-text {
+  background: #f8fafb;
+}
+
+input[type="date"].form-control,
+select.form-select {
+  background: #f8fafb;
+  border-radius: 0.75rem;
+}
+
+.table {
+  border-radius: 1rem;
+  overflow: hidden;
+  background: #fff;
+}
+
+.table th, .table td {
+  border: none;
+}
+
+.table-striped > tbody > tr:nth-of-type(odd) {
+  background-color: #f8fafb;
+}
+
+.table-success th {
+  background: linear-gradient(90deg, #e9fbe9 60%, #d2f4ea 100%);
+  color: #198754;
+}
+
+.alert-warning {
+  background: #fffbe6;
+  border: 1.5px solid #ffe58f;
+  color: #856404;
+}
+
+hr {
+  border-top: 1.5px solid #e9ecef;
+}
