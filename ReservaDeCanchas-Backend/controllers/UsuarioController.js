@@ -151,10 +151,40 @@ const eliminarUsuario = async (req, res, next) => {
   }
 };
 
+const loginUsuario = async (req, res) => {
+  const criteria = {
+    correo: req.body.correo, 
+    contraseña: req.body.contraseña
+  }
+  try {
+    const user = await Usuario.findOne(criteria);
+    if(!user){
+      res.json({
+        status: 0,
+        msg: "not found"
+      })
+    }else{
+      res.json({
+        status: 1,
+        msg: "Success",
+        correo: user.correo,
+        tipo: user.tipo,
+        userid: user._id
+      })
+    }
+  } catch (error) {
+    res.json({
+      status: 0,
+      msg: "error"
+    })
+  }
+};
+
 module.exports = {
   crearUsuario,
   obtenerUsuarios,
   obtenerUsuarioPorId,
   actualizarUsuario,
-  eliminarUsuario
+  eliminarUsuario,
+  loginUsuario
 };
