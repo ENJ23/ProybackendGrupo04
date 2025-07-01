@@ -85,8 +85,7 @@ app.get('/', (req, res) => {
         'POST /usuarios': 'Crear un nuevo usuario',
         'GET /usuarios/:id': 'Obtener un usuario por ID',
         'PUT /usuarios/:id': 'Actualizar un usuario por ID',
-        'DELETE /usuarios/:id': 'Eliminar un usuario por ID',
-        'POST /usuarios/login': 'Iniciar sesión de usuario'
+        'DELETE /usuarios/:id': 'Eliminar un usuario por ID'
       }
     }
   });

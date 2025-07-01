@@ -1,4 +1,7 @@
 const Usuario = require('../models/Usuario');
+const bcrypt = require('bcrypt');
+const { OAuth2Client } = require('google-auth-library');
+const client = new OAuth2Client("694732029000-2spfvr38jrm751h35ptm39atgs82bhhq.apps.googleusercontent.com");
 
 // Crear un nuevo usuario (POST)
 const crearUsuario = async (req, res, next) => {
@@ -6,7 +9,7 @@ const crearUsuario = async (req, res, next) => {
     #swagger.tags = ['Usuarios']
     #swagger.summary = 'Crear un nuevo usuario'
     #swagger.description = 'Crea un usuario nuevo en la base de datos.'
-    #swagger.parameters['body'] = {
+    #swagger.parameters['body'] = {oi
       in: 'body',
       description: 'Datos del usuario a crear',
       required: true,
@@ -18,8 +21,19 @@ const crearUsuario = async (req, res, next) => {
     }
   */
   try {
+    // Verificar que no exista otro usuario con ese correo
+    const existe = await Usuario.findOne({ correo: req.body.correo });
+    if (existe) {
+      return res.status(400).json({ success: false, message: 'El correo ya está registrado' });
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    req.body.contraseña = await bcrypt.hash(req.body.contraseña, salt);
+    req.body.proveedor = 'manual';
+
     const nuevoUsuario = new Usuario(req.body);
     const usuarioGuardado = await nuevoUsuario.save();
+
     res.status(201).json({
       success: true,
       message: 'Usuario creado exitosamente',
@@ -152,31 +166,74 @@ const eliminarUsuario = async (req, res, next) => {
 };
 
 const loginUsuario = async (req, res) => {
-  const criteria = {
-    correo: req.body.correo, 
-    contraseña: req.body.contraseña
-  }
+  const { correo, contraseña } = req.body;
+
   try {
-    const user = await Usuario.findOne(criteria);
-    if(!user){
-      res.json({
-        status: 0,
-        msg: "not found"
-      })
-    }else{
-      res.json({
-        status: 1,
-        msg: "Success",
-        correo: user.correo,
-        tipo: user.tipo,
-        userid: user._id
-      })
+    const usuario = await Usuario.findOne({ correo });
+
+    if (!usuario || usuario.proveedor !== 'manual') {
+      return res.status(401).json({ status: 0, msg: "Usuario no encontrado o no válido para login manual" });
     }
-  } catch (error) {
+
+    const validPass = await bcrypt.compare(contraseña, usuario.contraseña);
+    if (!validPass) {
+      return res.status(401).json({ status: 0, msg: "Contraseña incorrecta" });
+    }
+
     res.json({
-      status: 0,
-      msg: "error"
-    })
+      status: 1,
+      msg: "Login exitoso",
+      nombre: usuario.nombre,
+      correo: usuario.correo,
+      tipo: usuario.tipo,
+      userid: usuario._id
+    });
+  } catch (error) {
+    res.status(500).json({ status: 0, msg: "Error interno del servidor" });
+  }
+};
+
+const loginConGoogle = async (req, res) => {
+  const { credential } = req.body;
+
+  try {
+    const ticket = await client.verifyIdToken({
+      idToken: credential,
+      audience: "694732029000-2spfvr38jrm751h35ptm39atgs82bhhq.apps.googleusercontent.com"
+    });
+
+    const payload = ticket.getPayload();
+    const email = payload.email;
+    const nombre = payload.given_name;
+    const apellido = payload.family_name || "";
+
+    let usuario = await Usuario.findOne({ correo: email });
+
+    if (!usuario) {
+      usuario = new Usuario({
+        nombre,
+        apellido,
+        correo: email,
+        contraseña: '-', // no se usa
+        proveedor: 'google',
+        tipo: 'Cliente'
+      });
+      await usuario.save();
+    }
+
+    res.json({
+      success: true,
+      message: 'Login con Google exitoso',
+      correo: usuario.correo,
+      tipo: usuario.tipo,
+      userid: usuario._id
+    });
+
+  } catch (error) {
+    res.status(401).json({
+      success: false,
+      message: 'Token inválido de Google'
+    });
   }
 };
 
@@ -184,7 +241,8 @@ module.exports = {
   crearUsuario,
   obtenerUsuarios,
   obtenerUsuarioPorId,
+  loginUsuario,
   actualizarUsuario,
   eliminarUsuario,
-  loginUsuario
+  loginConGoogle
 };
