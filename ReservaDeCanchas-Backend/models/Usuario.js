@@ -4,12 +4,21 @@ const usuarioSchema = new mongoose.Schema({
   nombre: { type: String, required: true },
   apellido: { type: String, required: true },
   correo: { type: String, required: true, unique: true },
-  contraseña: { type: String, required: true }
+  contraseña: {
+    type: String,
+    required: function () {
+      return this.proveedor !== 'google';
+    }
+  },
+  proveedor: {
+    type: String,
+    enum: ['manual', 'google'],
+    default: 'manual'
+  }
 }, {
-  discriminatorKey: 'tipo', // Campo que diferencia los tipos
-  collection: 'usuarios'    // Todos en la misma colección
+  discriminatorKey: 'tipo',
+  collection: 'usuarios'
 });
 
 const Usuario = mongoose.model('Usuario', usuarioSchema);
-
 module.exports = Usuario;

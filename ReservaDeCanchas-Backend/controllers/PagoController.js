@@ -209,7 +209,7 @@ const crearPagoMercadoPago = async (req, res, next) => {
           unit_price: Number(importeSenia)
         }
       ],
-      notification_url: 'https://a7f3-2803-9800-9500-6fbc-bcb0-7da7-1e5a-98b1.ngrok-free.app/pagos/webhook',
+      notification_url: 'https://96d9-2803-9800-9500-6fbc-cddc-1d15-3efa-a924.ngrok-free.app/pagos/webhook',
       external_reference: pagoId.toString()
 
     };    

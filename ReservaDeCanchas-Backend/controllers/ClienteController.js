@@ -1,4 +1,5 @@
 const Cliente = require('../models/Cliente');
+const bcrypt = require('bcrypt');
 
 // Crear un nuevo cliente (POST)
 const crearCliente = async (req, res, next) => {
@@ -18,6 +19,19 @@ const crearCliente = async (req, res, next) => {
     }
   */
   try {
+    // Verificar si el correo ya está registrado
+    const existe = await Cliente.findOne({ correo: req.body.correo });
+    if (existe) {
+      return res.status(400).json({ success: false, message: 'El correo ya está registrado' });
+    }
+
+    // Hashear la contraseña antes de guardar
+    const salt = await bcrypt.genSalt(10);
+    req.body.contraseña = await bcrypt.hash(req.body.contraseña, salt);
+
+    // Asegurar tipo Cliente
+    req.body.tipo = 'Cliente';
+
     const nuevoCliente = new Cliente(req.body);
     const clienteGuardado = await nuevoCliente.save();
     res.status(201).json({
