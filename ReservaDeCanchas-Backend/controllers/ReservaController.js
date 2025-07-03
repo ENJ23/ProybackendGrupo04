@@ -43,7 +43,7 @@ const obtenerReservas = async (req, res, next) => {
   */
   try {
     const reservas = await Reserva.find()
-      .populate('horarioReservado')
+      .populate('horariosReservados')
       .populate('cancha')
       .populate('cliente')
       .populate('pago');
@@ -72,7 +72,7 @@ const obtenerReservaPorId = async (req, res, next) => {
   */
   try {
     const reserva = await Reserva.findById(req.params.id)
-      .populate('horarioReservado')
+      .populate('horariosReservados')
       .populate('cancha')
       .populate('cliente')
       .populate('pago');
