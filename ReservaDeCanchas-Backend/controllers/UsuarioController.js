@@ -216,20 +216,23 @@ const loginConGoogle = async (req, res) => {
         correo: email,
         contraseña: '-', // no se usa
         proveedor: 'google',
-        tipo: 'Cliente'
+        tipo: 'Cliente',
+        telefono: 'sin-telefono'
       });
       await usuario.save();
     }
 
     res.json({
-      success: true,
-      message: 'Login con Google exitoso',
+      status: 1,
+      msg: 'Login con Google exitoso',
+      nombre: usuario.nombre,
       correo: usuario.correo,
       tipo: usuario.tipo,
       userid: usuario._id
     });
 
   } catch (error) {
+    console.error('Error en loginConGoogle:', error);
     res.status(401).json({
       success: false,
       message: 'Token inválido de Google'
