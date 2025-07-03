@@ -220,5 +220,6 @@ module.exports = {
   obtenerReservas,
   obtenerReservaPorId,
   actualizarReserva,
-  eliminarReserva
+  eliminarReserva,
+  obtenerReservasPorClienteYFecha
 };
