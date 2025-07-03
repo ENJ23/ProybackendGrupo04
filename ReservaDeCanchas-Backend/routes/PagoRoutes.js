@@ -9,5 +9,6 @@ router.get('/:id', PagoController.obtenerPagoPorId);
 router.put('/:id', PagoController.actualizarPago);
 router.delete('/:id', PagoController.eliminarPago);
 router.post('/webhook', PagoController.webhookMercadoPago);
+router.get('/cliente/:clienteId', PagoController.obtenerPagosPorCliente);
 
 module.exports = router;

@@ -8,5 +8,6 @@ router.get('/buscar', ReservaController.obtenerReservasPorClienteYFecha);
 router.get('/:id', ReservaController.obtenerReservaPorId);
 router.put('/:id', ReservaController.actualizarReserva);
 router.delete('/:id', ReservaController.eliminarReserva);
+router.get('/cliente/:clienteId', ReservaController.obtenerReservasPorCliente);
 
 module.exports = router;
