@@ -159,25 +159,57 @@ const eliminarReserva = async (req, res, next) => {
   }
 };
 
-// Obtener reservas por cliente (GET)
-const obtenerReservasPorCliente = async (req, res, next) => {
+// Obtener reservas por nombre de cliente y fecha (GET)
+const obtenerReservasPorClienteYFecha = async (req, res, next) => {
   /*
     #swagger.tags = ['Reservas']
-    #swagger.summary = 'Obtener reservas por cliente'
-    #swagger.parameters['clienteId'] = { description: 'ID del cliente', required: true }
-    #swagger.responses[200] = {
-      description: 'Reservas del cliente obtenidas con éxito.',
-      schema: { $ref: '#/definitions/Reserva' }
-    }
+    #swagger.summary = 'Obtener reservas por nombre de cliente y fecha'
+    #swagger.description = 'Retorna las reservas de un cliente para una fecha específica'
+    #swagger.parameters['nombre'] = { description: 'Nombre del cliente' }
+    #swagger.parameters['fecha'] = { description: 'Fecha en formato YYYY-MM-DD', required: false }
   */
   try {
-    const { clienteId } = req.params;
-    const reservas = await Reserva.find({ cliente: clienteId })
-      .populate('horariosReservados')
-      .populate('cancha')
-      .populate('pago')
-      .sort({ fecha: -1 });
-    res.status(200).json(reservas);
+    const { nombre } = req.query;
+    let { fecha } = req.query;
+    
+    // Si no se proporciona fecha, usar la fecha actual
+    if (!fecha) {
+      const today = new Date();
+      fecha = today.toISOString().split('T')[0]; // Formato YYYY-MM-DD
+    }
+
+    const clientes = await Cliente.find({
+      $or: [
+        { nombre: { $regex: nombre, $options: 'i' } },
+        { apellido: { $regex: nombre, $options: 'i' } },
+        { 
+          $expr: {
+            $regexMatch: {
+              input: { $concat: ["$nombre", " ", "$apellido"] },
+              regex: nombre,
+              options: 'i'
+            }
+          }
+        }
+      ]
+    }).select('_id');
+
+    const clienteIds = clientes.map(c => c._id);
+
+    const reservas = await Reserva.find({
+      fecha,
+      cliente: { $in: clienteIds }
+    })
+    .populate('cliente', 'nombre apellido telefono')
+    .populate('cancha', 'nombre')
+    .populate('pago')
+    .sort({ horaInicio: 1 });
+
+    res.status(200).json({
+      success: true,
+      message: 'Reservas encontradas',
+      data: reservas
+    });
   } catch (error) {
     next(error);
   }
@@ -189,5 +221,5 @@ module.exports = {
   obtenerReservaPorId,
   actualizarReserva,
   eliminarReserva,
-  obtenerReservasPorCliente
+  obtenerReservasPorClienteYFecha
 };
