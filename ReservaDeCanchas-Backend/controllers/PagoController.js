@@ -209,7 +209,7 @@ const crearPagoMercadoPago = async (req, res, next) => {
           unit_price: Number(importeSenia)
         }
       ],
-      notification_url: 'https://96d9-2803-9800-9500-6fbc-cddc-1d15-3efa-a924.ngrok-free.app/pagos/webhook',
+      notification_url: 'https://proybackendgrupo04.onrender.com/pagos/webhook',
       external_reference: pagoId.toString()
 
     };    
@@ -365,6 +365,26 @@ webhookMercadoPago = async (req, res) => {
   }
 };
 
+// Obtener pagos por cliente (GET)
+const obtenerPagosPorCliente = async (req, res, next) => {
+  /*
+    #swagger.tags = ['Pagos']
+    #swagger.summary = 'Obtener pagos por cliente'
+    #swagger.parameters['clienteId'] = { description: 'ID del cliente', required: true }
+    #swagger.responses[200] = {
+      description: 'Pagos del cliente obtenidos con éxito.',
+      schema: { $ref: '#/definitions/Pago' }
+    }
+  */
+  try {
+    const { clienteId } = req.params;
+    const pagos = await Pago.find({ cliente: clienteId }).sort({ fecha: -1 });
+    res.status(200).json(pagos);
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   crearPago,
   obtenerPagos,
@@ -372,5 +392,6 @@ module.exports = {
   actualizarPago,
   eliminarPago,
   crearPagoMercadoPago,
-  webhookMercadoPago
+  webhookMercadoPago,
+  obtenerPagosPorCliente
 };
