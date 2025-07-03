@@ -1,4 +1,5 @@
 const Encargado = require('../models/Encargado');
+const bcrypt = require('bcrypt');
 
 // Crear un nuevo encargado (POST)
 const crearEncargado = async (req, res, next) => {
@@ -18,6 +19,19 @@ const crearEncargado = async (req, res, next) => {
     }
   */
   try {
+    // Verificar si el correo ya está registrado
+    const existe = await Encargado.findOne({ correo: req.body.correo });
+    if (existe) {
+      return res.status(400).json({ success: false, message: 'El correo ya está registrado' });
+    }
+
+    // Hashear la contraseña antes de guardar
+    const salt = await bcrypt.genSalt(10);
+    req.body.contraseña = await bcrypt.hash(req.body.contraseña, salt);
+
+    // Asegurar tipo Encargado
+    req.body.tipo = 'Encargado';
+
     const nuevoEncargado = new Encargado(req.body);
     const encargadoGuardado = await nuevoEncargado.save();
     res.status(201).json({

@@ -165,10 +165,41 @@ const eliminarCliente = async (req, res, next) => {
   }
 };
 
+// Buscar cliente por nombre y apellido (parcial, insensible a mayúsculas/minúsculas)
+const buscarClientePorNombreApellido = async (req, res, next) => {
+  /*
+    #swagger.tags = ['Clientes']
+    #swagger.summary = 'Buscar clientes por nombre y apellido'
+    #swagger.parameters['nombre'] = { description: 'Nombre del cliente', required: false }
+    #swagger.parameters['apellido'] = { description: 'Apellido del cliente', required: false }
+    #swagger.responses[200] = {
+      description: 'Clientes encontrados',
+      schema: { $ref: '#/definitions/Cliente' }
+    }
+  */
+  try {
+    const { nombre = '', apellido = '' } = req.query;
+    const query = {
+      nombre: { $regex: nombre, $options: 'i' },
+      apellido: { $regex: apellido, $options: 'i' }
+    };
+    const clientes = await Cliente.find(query);
+    res.status(200).json({
+      success: true,
+      message: 'Clientes encontrados',
+      data: clientes
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+
 module.exports = {
   crearCliente,
   obtenerClientes,
   obtenerClientePorId,
   actualizarCliente,
-  eliminarCliente
+  eliminarCliente,
+  buscarClientePorNombreApellido
 };
