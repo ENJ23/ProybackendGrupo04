@@ -3,7 +3,7 @@ const Usuario = require('./Usuario');
 
 const clienteSchema = new mongoose.Schema({
   telefono: { type: String, required: true },
-  antecedente: { type: String }
+  antecedentes: [{ type: String }]
 });
 
 const Cliente = Usuario.discriminator('Cliente', clienteSchema);
