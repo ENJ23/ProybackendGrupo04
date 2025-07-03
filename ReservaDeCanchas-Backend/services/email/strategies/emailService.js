@@ -1,4 +1,3 @@
-// services/email/emailService.js
 const nodemailer = require('nodemailer');
 const emailFactory = require('./emailFactory');
 require('dotenv').config();

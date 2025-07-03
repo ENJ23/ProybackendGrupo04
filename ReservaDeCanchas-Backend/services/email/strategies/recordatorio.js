@@ -14,8 +14,8 @@ class RecordatorioReserva extends BaseEmailStrategy {
       .replace('{{horaInicio}}', this.data.horaInicio);
 
     return {
-      from: `"Reservas ⚽" <${process.env.EMAIL_USER}>`,
-      to: this.data.email,
+      from: `"Reserva de Cancha ⚽" <${process.env.EMAIL_USER}>`,
+      to: this.data.to,
       subject: '⏰ Recordatorio de tu reserva',
       html,
     };
