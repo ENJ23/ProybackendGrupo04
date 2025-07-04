@@ -228,5 +228,6 @@ module.exports = {
   obtenerClientePorId,
   actualizarCliente,
   eliminarCliente,
-  buscarClientePorNombreApellido
+  buscarClientePorNombreApellido,
+  cambiarPassword
 };
