@@ -194,6 +194,33 @@ const buscarClientePorNombreApellido = async (req, res, next) => {
   }
 };
 
+// Cambiar contraseña de un cliente
+const cambiarPassword = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { actual, nueva } = req.body;
+
+    const cliente = await Cliente.findById(id);
+    if (!cliente) {
+      return res.status(404).json({ message: 'Cliente no encontrado' });
+    }
+
+    // Verifica la contraseña actual
+    const match = await bcrypt.compare(actual, cliente.contraseña);
+    if (!match) {
+      return res.status(400).json({ message: 'La contraseña actual es incorrecta' });
+    }
+
+    // Cambia la contraseña
+    cliente.contraseña = await bcrypt.hash(nueva, 10);
+    await cliente.save();
+
+    res.json({ message: 'Contraseña actualizada correctamente' });
+  } catch (error) {
+    res.status(500).json({ message: 'Error al cambiar la contraseña', error: error.message });
+  }
+};
+
 
 module.exports = {
   crearCliente,
