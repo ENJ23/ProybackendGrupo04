@@ -8,6 +8,6 @@ router.get('/', ClienteController.obtenerClientes);
 router.get('/:id', ClienteController.obtenerClientePorId);
 router.put('/:id', ClienteController.actualizarCliente);
 router.delete('/:id', ClienteController.eliminarCliente);
-router.put('/cambiar-password/:id', ClienteController.cambiarPassword);
+router.put('/:id/cambiar-password', ClienteController.cambiarPassword);
 
 module.exports = router;
