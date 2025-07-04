@@ -385,6 +385,8 @@ const obtenerPagosPorCliente = async (req, res, next) => {
   }
 };
 
+
+
 module.exports = {
   crearPago,
   obtenerPagos,

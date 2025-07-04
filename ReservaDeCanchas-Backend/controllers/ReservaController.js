@@ -216,11 +216,36 @@ const obtenerReservasPorClienteYFecha = async (req, res, next) => {
   }
 };
 
+// Obtener reservas por cliente (GET)
+const obtenerReservasPorCliente = async (req, res, next) => {
+  /*
+    #swagger.tags = ['Reservas']
+    #swagger.summary = 'Obtener reservas por cliente'
+    #swagger.parameters['clienteId'] = { description: 'ID del cliente', required: true }
+    #swagger.responses[200] = {
+      description: 'Reservas del cliente obtenidas con éxito.',
+      schema: { $ref: '#/definitions/Reserva' }
+    }
+  */
+  try {
+    const { clienteId } = req.params;
+    const reservas = await Reserva.find({ cliente: clienteId })
+      .populate('horariosReservados')
+      .populate('cancha')
+      .populate('pago')
+      .sort({ fecha: -1 });
+    res.status(200).json(reservas);
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   crearReserva,
   obtenerReservas,
   obtenerReservaPorId,
   actualizarReserva,
   eliminarReserva,
-  obtenerReservasPorClienteYFecha
+  obtenerReservasPorClienteYFecha,
+  obtenerReservasPorCliente
 };
