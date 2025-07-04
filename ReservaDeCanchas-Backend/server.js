@@ -1,5 +1,6 @@
 // server.js - Archivo principal del servidor
 require('dotenv').config();
+require('./cron/enviarRecordatorioNodeMailer');
 const express = require('express');
 const cors = require('cors');
 const connectDB = require('./config/database');
