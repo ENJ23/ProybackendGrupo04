@@ -1,4 +1,5 @@
 const Reserva = require('../models/Reserva');
+const Cliente = require('../models/Cliente');
 
 // Crear una nueva reserva (POST)
 const crearReserva = async (req, res, next) => {
