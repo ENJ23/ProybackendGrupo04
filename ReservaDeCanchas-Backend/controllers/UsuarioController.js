@@ -184,7 +184,9 @@ const loginUsuario = async (req, res) => {
       status: 1,
       msg: "Login exitoso",
       nombre: usuario.nombre,
+      apellido: usuario.apellido,
       correo: usuario.correo,
+      telefono: usuario.telefono  || '',
       tipo: usuario.tipo,
       userid: usuario._id
     });
