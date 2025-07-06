@@ -2,36 +2,56 @@ const Usuario = require('../models/Usuario');
 const bcrypt = require('bcrypt');
 const { OAuth2Client } = require('google-auth-library');
 const client = new OAuth2Client("989381766185-qqun9sbv6qk03guuar3n1inlps1cegbn.apps.googleusercontent.com");
+const axios = require('axios');
 
+// Función para verificar el captcha
+async function verificarCaptcha(token) {
+  const secretKey = '6LehQHorAAAAAMsjcW0GjEQ0Fq5y6YQx4rX21bIE';
+  const url = `https://www.google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${token}`;
+  
+  try {
+    const response = await axios.post(url);
+    return response.data.success;
+  } catch (error) {
+    console.error('Error verificando captcha:', error);
+    return false;
+  }
+}
 // Crear un nuevo usuario (POST)
 const crearUsuario = async (req, res, next) => {
-  /*
-    #swagger.tags = ['Usuarios']
-    #swagger.summary = 'Crear un nuevo usuario'
-    #swagger.description = 'Crea un usuario nuevo en la base de datos.'
-    #swagger.parameters['body'] = {oi
-      in: 'body',
-      description: 'Datos del usuario a crear',
-      required: true,
-      schema: { $ref: '#/definitions/Usuario' }
-    }
-    #swagger.responses[201] = {
-      description: 'Usuario creado exitosamente',
-      schema: { $ref: '#/definitions/Usuario' }
-    }
-  */
   try {
+    const { captchaToken, ...datosUsuario } = req.body;
+    
+    // Validar captcha
+    if (!captchaToken) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Captcha no resuelto' 
+      });
+    }
+    
+    const captchaValido = await verificarCaptcha(captchaToken);
+    if (!captchaValido) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Captcha inválido' 
+      });
+    }
+
     // Verificar que no exista otro usuario con ese correo
-    const existe = await Usuario.findOne({ correo: req.body.correo });
+    const existe = await Usuario.findOne({ correo: datosUsuario.correo });
     if (existe) {
-      return res.status(400).json({ success: false, message: 'El correo ya está registrado' });
+      return res.status(400).json({ 
+        success: false, 
+        message: 'El correo ya está registrado' 
+      });
     }
 
     const salt = await bcrypt.genSalt(10);
-    req.body.contraseña = await bcrypt.hash(req.body.contraseña, salt);
-    req.body.proveedor = 'manual';
+    datosUsuario.contraseña = await bcrypt.hash(datosUsuario.contraseña, salt);
+    datosUsuario.proveedor = 'manual';
 
-    const nuevoUsuario = new Usuario(req.body);
+    const nuevoUsuario = new Usuario(datosUsuario);
     const usuarioGuardado = await nuevoUsuario.save();
 
     res.status(201).json({
@@ -166,18 +186,40 @@ const eliminarUsuario = async (req, res, next) => {
 };
 
 const loginUsuario = async (req, res) => {
-  const { correo, contraseña } = req.body;
+  const { correo, contraseña, captchaToken } = req.body;
 
   try {
+    // Validar captcha
+    if (!captchaToken) {
+      return res.status(400).json({ 
+        status: 0, 
+        msg: 'Captcha no resuelto' 
+      });
+    }
+    
+    const captchaValido = await verificarCaptcha(captchaToken);
+    if (!captchaValido) {
+      return res.status(400).json({ 
+        status: 0, 
+        msg: 'Captcha inválido' 
+      });
+    }
+
     const usuario = await Usuario.findOne({ correo });
 
     if (!usuario || usuario.proveedor !== 'manual') {
-      return res.status(401).json({ status: 0, msg: "Usuario no encontrado o no válido para login manual" });
+      return res.status(401).json({ 
+        status: 0, 
+        msg: "Usuario no encontrado o no válido para login manual" 
+      });
     }
 
     const validPass = await bcrypt.compare(contraseña, usuario.contraseña);
     if (!validPass) {
-      return res.status(401).json({ status: 0, msg: "Contraseña incorrecta" });
+      return res.status(401).json({ 
+        status: 0, 
+        msg: "Contraseña incorrecta" 
+      });
     }
 
     res.json({
@@ -186,7 +228,7 @@ const loginUsuario = async (req, res) => {
       nombre: usuario.nombre,
       apellido: usuario.apellido,
       correo: usuario.correo,
-      telefono: usuario.telefono  || '',
+      telefono: usuario.telefono || '',
       tipo: usuario.tipo,
       userid: usuario._id
     });
