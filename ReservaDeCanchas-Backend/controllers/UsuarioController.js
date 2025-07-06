@@ -1,7 +1,7 @@
 const Usuario = require('../models/Usuario');
 const bcrypt = require('bcrypt');
 const { OAuth2Client } = require('google-auth-library');
-const client = new OAuth2Client("694732029000-2spfvr38jrm751h35ptm39atgs82bhhq.apps.googleusercontent.com");
+const client = new OAuth2Client("989381766185-qqun9sbv6qk03guuar3n1inlps1cegbn.apps.googleusercontent.com");
 
 // Crear un nuevo usuario (POST)
 const crearUsuario = async (req, res, next) => {
@@ -199,7 +199,7 @@ const loginConGoogle = async (req, res) => {
   try {
     const ticket = await client.verifyIdToken({
       idToken: credential,
-      audience: "694732029000-2spfvr38jrm751h35ptm39atgs82bhhq.apps.googleusercontent.com"
+      audience: "989381766185-qqun9sbv6qk03guuar3n1inlps1cegbn.apps.googleusercontent.com"
     });
 
     const payload = ticket.getPayload();
