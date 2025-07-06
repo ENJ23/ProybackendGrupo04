@@ -1,6 +1,7 @@
 const Usuario = require('../models/Usuario');
 const bcrypt = require('bcrypt');
 const { OAuth2Client } = require('google-auth-library');
+const { generarToken } = require('../utils/jwt');
 const client = new OAuth2Client("989381766185-qqun9sbv6qk03guuar3n1inlps1cegbn.apps.googleusercontent.com");
 const axios = require('axios');
 
@@ -222,6 +223,7 @@ const loginUsuario = async (req, res) => {
       });
     }
 
+    const token = generarToken(usuario);
     res.json({
       status: 1,
       msg: "Login exitoso",
@@ -230,7 +232,8 @@ const loginUsuario = async (req, res) => {
       correo: usuario.correo,
       telefono: usuario.telefono || '',
       tipo: usuario.tipo,
-      userid: usuario._id
+      userid: usuario._id,
+      token
     });
   } catch (error) {
     res.status(500).json({ status: 0, msg: "Error interno del servidor" });
@@ -266,13 +269,15 @@ const loginConGoogle = async (req, res) => {
       await usuario.save();
     }
 
+    const token = generarToken(usuario);
     res.json({
       status: 1,
       msg: 'Login con Google exitoso',
       nombre: usuario.nombre,
       correo: usuario.correo,
       tipo: usuario.tipo,
-      userid: usuario._id
+      userid: usuario._id,
+      token
     });
 
   } catch (error) {
